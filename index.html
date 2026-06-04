@@ -279,6 +279,10 @@
       input.addEventListener('blur', commit);
     }
     document.getElementById('todoInput').addEventListener('keydown', e => { if (e.key === 'Enter') addTodo(); });
+    // 快捷链接：两个输入框任一回车都能提交，省得切回去点按钮
+    ['linkName', 'linkUrl'].forEach(id => {
+      document.getElementById(id).addEventListener('keydown', e => { if (e.key === 'Enter') addLink(); });
+    });
     renderTodos();
 
     // ---------- 快捷链接 ----------
