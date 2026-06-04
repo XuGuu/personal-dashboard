@@ -183,7 +183,18 @@
     setInterval(tick, 1000);
 
     // ---------- 天气（用免费的 Open-Meteo，无需密钥）----------
+    // 缓存 30 分钟，避免每次打开页面都重新请求 API
+    const WEATHER_CACHE_MS = 30 * 60 * 1000;
+    function showCachedWeather() {
+      const cached = JSON.parse(localStorage.getItem('dash_weather') || 'null');
+      if (cached && Date.now() - cached.at < WEATHER_CACHE_MS) {
+        document.getElementById('weather').textContent = `当前 ${cached.t}°C · ${cached.desc}`;
+        return true;
+      }
+      return false;
+    }
     function loadWeather() {
+      if (showCachedWeather()) return; // 缓存还新鲜，直接用
       if (!navigator.geolocation) {
         document.getElementById('weather').textContent = '当前浏览器不支持定位，跳过天气。';
         return;
@@ -197,6 +208,7 @@
           const t = Math.round(data.current.temperature_2m);
           const desc = weatherText(data.current.weather_code);
           document.getElementById('weather').textContent = `当前 ${t}°C · ${desc}`;
+          localStorage.setItem('dash_weather', JSON.stringify({ t, desc, at: Date.now() }));
         } catch (e) {
           document.getElementById('weather').textContent = '天气获取失败，检查下网络～';
         }
