@@ -283,6 +283,14 @@
     ['linkName', 'linkUrl'].forEach(id => {
       document.getElementById(id).addEventListener('keydown', e => { if (e.key === 'Enter') addLink(); });
     });
+    // 按 "/" 快速跳到待办输入框（不在输入框时才触发），仿 GitHub 体验
+    document.addEventListener('keydown', e => {
+      if (e.key !== '/') return;
+      const t = e.target.tagName;
+      if (t === 'INPUT' || t === 'TEXTAREA') return;
+      e.preventDefault();
+      document.getElementById('todoInput').focus();
+    });
     renderTodos();
 
     // ---------- 快捷链接 ----------
