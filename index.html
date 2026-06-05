@@ -19,6 +19,13 @@
       --text: #f5f7ff;
       --muted: rgba(245, 247, 255, 0.7);
     }
+    /* 浅色主题：当 body 有 .light 类时生效 */
+    body.light {
+      --card: rgba(255, 255, 255, 0.75);
+      --card-border: rgba(0, 0, 0, 0.08);
+      --text: #1f2440;
+      --muted: rgba(31, 36, 64, 0.6);
+    }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
@@ -27,8 +34,21 @@
       background: linear-gradient(135deg, #1e2a78 0%, #6a3093 50%, #a044ff 100%);
       background-attachment: fixed;
       padding: 32px 20px 60px;
+      transition: color .2s;
     }
+    body.light { background: linear-gradient(135deg, #fef3c7 0%, #ffe4e6 50%, #dbeafe 100%); }
     .wrap { max-width: 960px; margin: 0 auto; }
+
+    /* 主题切换按钮 */
+    .theme-toggle {
+      position: fixed; top: 16px; right: 16px; z-index: 10;
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.25);
+      backdrop-filter: blur(8px); cursor: pointer; font-size: 18px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text); padding: 0;
+    }
+    .theme-toggle:hover { background: rgba(255,255,255,0.28); }
 
     /* ---------- 顶部：时钟 + 问候 + 天气 ---------- */
     .hero { text-align: center; margin: 24px 0 36px; }
@@ -108,6 +128,7 @@
   </style>
 </head>
 <body>
+  <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()" title="切换深色 / 浅色">🌙</button>
   <div class="wrap">
     <!-- 顶部 -->
     <div class="hero">
@@ -156,6 +177,20 @@
        说明：下面所有数据都用 localStorage 保存在你自己的浏览器里。
        localStorage 是浏览器自带的小仓库，关掉网页数据也还在，刷新不会丢。
        ==================================================================== */
+
+    // ---------- 主题切换 ----------
+    // 'light' 或 'dark'，默认深色（晚上看眼睛舒服）
+    function applyTheme(name) {
+      document.body.classList.toggle('light', name === 'light');
+      document.getElementById('themeBtn').textContent = name === 'light' ? '☀️' : '🌙';
+    }
+    function toggleTheme() {
+      const cur = localStorage.getItem('dash_theme') || 'dark';
+      const next = cur === 'light' ? 'dark' : 'light';
+      localStorage.setItem('dash_theme', next);
+      applyTheme(next);
+    }
+    applyTheme(localStorage.getItem('dash_theme') || 'dark');
 
     // ---------- 时钟 + 日期 + 问候 ----------
     function tick() {
