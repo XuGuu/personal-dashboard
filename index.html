@@ -349,11 +349,27 @@
     function renderLinks() {
       const box = document.getElementById('linkList');
       box.innerHTML = links.map((l, i) => `
-        <a class="link-tile" href="${escapeAttr(l.url)}" target="_blank" rel="noopener">
+        <a class="link-tile" href="${escapeAttr(l.url)}" target="_blank" rel="noopener"
+           ondblclick="editLink(event, ${i})" title="双击编辑">
           <span class="x" onclick="removeLink(event, ${i})">×</span>
           <span class="icon">${faviconOrEmoji(l)}</span>
           <span>${escapeHtml(l.name)}</span>
         </a>`).join('');
+    }
+    // 双击链接进入编辑：弹出对话框分别问名字和网址
+    function editLink(e, i) {
+      e.preventDefault();
+      const name = prompt('修改名字：', links[i].name);
+      if (name === null) return;        // 取消
+      const url = prompt('修改网址：', links[i].url);
+      if (url === null) return;
+      const trimmedName = name.trim(), trimmedUrl = url.trim();
+      if (!trimmedName || !trimmedUrl) return;
+      links[i] = {
+        name: trimmedName,
+        url: /^https?:\/\//i.test(trimmedUrl) ? trimmedUrl : 'https://' + trimmedUrl,
+      };
+      saveLinks(); renderLinks();
     }
     function faviconOrEmoji(l) {
       // 用网站第一个字母当图标，简单又不依赖外部图片
