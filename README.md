@@ -1,5 +1,8 @@
 # 🪟 个人仪表盘 Personal Dashboard
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![No deps](https://img.shields.io/badge/dependencies-none-brightgreen.svg)](#)
+
 一个好看的「新标签页」主页：时钟、问候语、实时天气、待办清单、快捷链接、每日一言。
 纯前端、零依赖、双击即用，所有数据都存在你自己的浏览器里。
 
