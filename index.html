@@ -179,18 +179,30 @@
        ==================================================================== */
 
     // ---------- 主题切换 ----------
-    // 'light' 或 'dark'，默认深色（晚上看眼睛舒服）
+    // 默认跟随系统：你电脑设深色就深色、浅色就浅色。
+    // 一旦你主动点过切换按钮，就记住你的偏好不再跟随系统。
+    function systemPrefersLight() {
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+    }
     function applyTheme(name) {
       document.body.classList.toggle('light', name === 'light');
       document.getElementById('themeBtn').textContent = name === 'light' ? '☀️' : '🌙';
     }
+    function currentTheme() {
+      return localStorage.getItem('dash_theme') || (systemPrefersLight() ? 'light' : 'dark');
+    }
     function toggleTheme() {
-      const cur = localStorage.getItem('dash_theme') || 'dark';
-      const next = cur === 'light' ? 'dark' : 'light';
-      localStorage.setItem('dash_theme', next);
+      const next = currentTheme() === 'light' ? 'dark' : 'light';
+      localStorage.setItem('dash_theme', next); // 一旦切换就记住偏好
       applyTheme(next);
     }
-    applyTheme(localStorage.getItem('dash_theme') || 'dark');
+    applyTheme(currentTheme());
+    // 没设过偏好时，系统设置变了也跟着变
+    if (window.matchMedia) {
+      window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => {
+        if (!localStorage.getItem('dash_theme')) applyTheme(currentTheme());
+      });
+    }
 
     // ---------- 时钟 + 日期 + 问候 ----------
     function tick() {
