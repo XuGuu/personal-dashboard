@@ -23,6 +23,10 @@
 - 数据保存在浏览器的 `localStorage`（本地存储）里，关掉网页也不会丢，且不会上传到任何服务器。
 - 想换背景颜色？改 `<style>` 里 `body` 的 `background`。想改问候语？搜代码里的 `greet`。
 
+## 📜 更新日志
+
+详见 [CHANGELOG.md](CHANGELOG.md)。
+
 ## 📄 许可证
 
 MIT
