@@ -9,6 +9,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="个人仪表盘：时钟、天气、待办清单、快捷链接、每日一言。纯前端，数据存本地，不联网。">
+  <meta name="color-scheme" content="dark light">
   <title>我的仪表盘</title>
   <style>
     /* ---------- 基础与主题 ---------- */
@@ -128,7 +130,7 @@
   </style>
 </head>
 <body>
-  <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()" title="切换深色 / 浅色">🌙</button>
+  <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()" title="切换深色 / 浅色" aria-label="切换深色或浅色主题">🌙</button>
   <div class="wrap">
     <!-- 顶部 -->
     <div class="hero">
@@ -287,7 +289,7 @@
         <li class="todo-item ${t.done ? 'done' : ''}">
           <input type="checkbox" ${t.done ? 'checked' : ''} onclick="toggleTodo(${i})">
           <span ondblclick="editTodo(${i}, this)" title="双击编辑">${escapeHtml(t.text)}</span>
-          <button class="del" onclick="removeTodo(${i})">×</button>
+          <button class="del" onclick="removeTodo(${i})" aria-label="删除这条待办" title="删除">×</button>
         </li>`).join('');
       const doneCount = todos.filter(t => t.done).length;
       const left = todos.length - doneCount;
